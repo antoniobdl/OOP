@@ -1,30 +1,33 @@
+import java.io.*;
+import java.util.*;
+
 public class Filme {
-    private String codigoFilme;
-    private String titulo;
+    private String codigo;
+    private String nome;
     private String genero;
     private String sinopse;
 
-    public Filme(String codigoFilme, String titulo, String genero, String sinopse) {
-        this.codigoFilme = codigoFilme;
-        this.titulo = titulo;
+    public Filme(String codigo, String nome, String genero, String sinopse) {
+        this.codigo = codigo;
+        this.nome = nome;
         this.genero = genero;
         this.sinopse = sinopse;
     }
 
-    public String getCodigoFilme() {
-        return codigoFilme;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setCodigoFilme(String codigoFilme) {
-        this.codigoFilme = codigoFilme;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getGenero() {
@@ -45,11 +48,39 @@ public class Filme {
 
     @Override
     public String toString() {
-        return "Filme{" +
-                "codigoFilme='" + codigoFilme + '\'' +
-                ", titulo='" + titulo + '\'' +
-                ", genero='" + genero + '\'' +
-                ", sinopse='" + sinopse + '\'' +
-                '}';
+        return codigo + "," + nome + "," + genero + "," + sinopse;
+    }
+
+    public static Filme fromString(String csv) {
+        try {
+            String[] dados = csv.split(",");
+            if (dados.length < 4) {
+                throw new IllegalArgumentException("Dados insuficientes para criar um Filme");
+            }
+            return new Filme(dados[0], dados[1], dados[2], dados[3]);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Formato inválido para Filme: " + csv);
+        }
+    }
+
+    public static List<Filme> carregarFilmes(String filepath) throws IOException {
+        List<Filme> filmes = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    filmes.add(fromString(line));
+                }
+            }
+        }
+        return filmes;
+    }
+
+    public static void salvarFilmes(List<Filme> filmes, String filepath) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filepath))) {
+            for (Filme filme : filmes) {
+                pw.println(filme.toString());
+            }
+        }
     }
 }
