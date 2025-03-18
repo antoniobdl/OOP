@@ -1,24 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
-public class GeradorCSV {
-    public static void main(String[] args) {
-        // Create src directory if it doesn't exist
-        File srcDir = new File("src");
-        if (!srcDir.exists()) {
-            srcDir.mkdir();
-        }
-
-        // Define the files to create
-        String[] files = {
-                "src/filmes.csv",
-                "src/salas.csv",
-                "src/sessoes.csv",
-                "src/vendas.csv"
-        };
-//cuelhogordo
-        // Create each file if it doesn't exist
         for (String filePath : files) {
             File file = new File(filePath);
             if (!file.exists()) {
